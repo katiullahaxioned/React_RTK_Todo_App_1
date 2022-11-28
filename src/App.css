@@ -1,0 +1,107 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #8276C8;
+}
+
+.App { text-align: center; }
+
+span { display: inline-block; }
+li { list-style: none; }
+textarea { resize: none; }
+
+.todo-form {
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.todo-form > * > * {
+  padding: 7px 10px;
+  font-size: 16px;
+}
+
+.todo-form > *:last-child > * {
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.toggle-task {
+  display: flex;
+  justify-content: center;
+}
+
+.toggle-task > * {
+  padding: 7px 20px;
+  border: 2px solid #222;
+  border-radius: 20px;
+  margin: 0 7px;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+.todo-items-all {
+  padding: 30px 5%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.todo-item {
+  max-width: 290px;
+  width: 290px;
+  padding: 15px;
+  border: 1px solid #222;
+  border-radius: 5px;
+  position: relative;
+  flex-grow: 1;
+  flex-shrink: 0;
+  text-align: left;
+}
+
+.form-todo-update {
+  max-height: 66px;
+  height: 66px;
+  overflow: hidden;
+}
+
+.form-todo-update > * { height: 100%; }
+
+.input-textarea {
+  display: none;
+}
+
+.input-textarea > * {
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  border-radius: 5px;
+  display: block;
+  overflow-y: auto;
+}
+
+.textarea-para {
+  padding: 5px;
+}
+
+.todo-item.active .input-textarea { display: block; }
+.todo-item.active .textarea-para { display: none; }
+
+.todo-items-control {
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.todo-items-control > * {
+  padding: 5px;
+  cursor: pointer;
+}
