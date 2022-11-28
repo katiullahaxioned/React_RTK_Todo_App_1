@@ -11,8 +11,8 @@ const todoSlice = createSlice({
     addTodo: (state, action) => {
       state.todo.push(action.payload);
     },
-    editTodo: (state, {message, index}) => {
-      state.todo.splice(index, 1, message);
+    editTodo: (state, action) => {
+      state.todo.splice(action.payload.index, 1, action.payload.message);
     }
   }
 })

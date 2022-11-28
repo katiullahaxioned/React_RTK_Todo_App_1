@@ -13,8 +13,10 @@ const TodoForm = () => {
 
   const handleAddTodo = () => {
     const value = inputTodo.current.value.trim();
-    dispatch(addTodo(value));
-    inputTodo.current.value = '';
+    if(value) {
+      dispatch(addTodo(value));
+      inputTodo.current.value = '';
+    }
   }
 
   return (
