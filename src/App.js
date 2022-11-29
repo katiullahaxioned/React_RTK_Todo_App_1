@@ -5,7 +5,7 @@ import TodoOutput from './features/todo/TodoOutput';
 function App() {
   return (
     <div className='App'>
-      <h2 className='section-heading'>Todo App</h2>
+      <h2 className='section-heading'>todo app</h2>
       <TodoForm />
       <TodoOutput />
     </div>

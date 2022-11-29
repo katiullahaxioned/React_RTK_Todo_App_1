@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateTodo, deleteTodo, completeTodo } from './todoSlice';
+import TodoItems from './TodoItems';
 
 
 const TodoOutput = () => {
@@ -9,21 +10,25 @@ const TodoOutput = () => {
   const [todoStatus, setTodoStatus] = useState("active");
   const todoItems = useSelector((state) => state.todos);
 
+  // remove previous <li> "active" class, when edit function invoked
   const removeActive = () => {
     for (let item of todoContainer?.current?.children)
       item.classList.remove("active");
   };
 
+  // todo item edit function
   const handleEdit = (e) => {
     removeActive();
-    e.target.parentElement.parentElement.classList.add("active");
+    e.currentTarget.parentElement.parentElement.classList.add("active");
   }
 
+  // todo item delete function
   const handleDelete = (id) => {
     dispatch(deleteTodo(id));
     removeActive();
   }
 
+  // update function:  to update modified textarea's value 
   const textareaUpdate = (e, id) => {
     if (e.key === "Enter") {
       dispatch(updateTodo({ id, item: e.target.value.trim() }));
@@ -31,14 +36,16 @@ const TodoOutput = () => {
     }
   };
 
+  // set todo item's status = completed 
   const handleComplete = (id) => {
     dispatch(completeTodo(id));
     removeActive();
   }
 
+  // prevent form's default behavior
   const handleFormUpdate = (e) => e.preventDefault();
   
-  // status toggle controls
+  // todo item's status toggle function
   const handleTodoStatus = (status) => {
     setTodoStatus(status);
     removeActive();
@@ -56,20 +63,7 @@ const TodoOutput = () => {
         {todoStatus === "all" && todoItems && todoItems.map((todo) => {
           const {id, item, complete} = todo;
           return (
-            <li key={id} className='todo-item'>
-              <form className='form-todo-update' onSubmit={handleFormUpdate}>
-                <p className='textarea-para'>{item}</p>
-                <div className="input-textarea">
-                  <textarea className="textarea" onKeyUp={(e) => textareaUpdate(e, id)} defaultValue={item} />
-                </div>
-              </form>
-              {complete && <span className='completed-flag'>✓</span>}
-              <div className="todo-items-control">
-                <span className="edit-btn" onClick={(e) => handleEdit(e)}>edit</span>
-                {!complete && <span className="complete-btn" onClick={() => handleComplete(id)}>complete</span>}
-                <span className="delete-btn" onClick={() => handleDelete(id)}>delete</span>
-              </div>
-            </li>
+            <TodoItems key={id} id={id} handleFormUpdate={handleFormUpdate} textareaUpdate={textareaUpdate} item={item} complete={complete} handleEdit={handleEdit} handleComplete={handleComplete} handleDelete={handleDelete} />
           );
         })}
         {/* todoStatus === "completed" */}
@@ -77,42 +71,18 @@ const TodoOutput = () => {
           const {id, item, complete} = todo;
           let todoCompleted;
           if(complete) {
-            todoCompleted = <li key={id} className='todo-item'>
-              <form className='form-todo-update' onSubmit={handleFormUpdate}>
-                <p className='textarea-para'>{item}</p>
-                <div className="input-textarea">
-                  <textarea className="textarea" onKeyUp={(e) => textareaUpdate(e, id)} defaultValue={item} />
-                </div>
-              </form>
-              <span className='completed-flag'>✓</span>
-              <div className="todo-items-control">
-                <span className="edit-btn" onClick={(e) => handleEdit(e)}>edit</span>
-                <span className="delete-btn" onClick={() => handleDelete(id)}>delete</span>
-              </div>
-            </li>
+            todoCompleted = <TodoItems key={id} id={id} handleFormUpdate={handleFormUpdate} textareaUpdate={textareaUpdate} item={item} complete={complete} handleEdit={handleEdit} handleComplete={handleComplete} handleDelete={handleDelete} />
           }
-          return todoCompleted
+          return todoCompleted;
         })}
         {/* todoStatus === "active" */}
         {todoStatus === "active" && todoItems && todoItems.map((todo) => {
           const {id, item, complete} = todo;
           let todoActive;
           if(!complete) {
-            todoActive = <li key={id} className='todo-item'>
-              <form className='form-todo-update' onSubmit={handleFormUpdate}>
-                <p className='textarea-para'>{item}</p>
-                <div className="input-textarea">
-                  <textarea className="textarea" onKeyUp={(e) => textareaUpdate(e, id)} defaultValue={item} />
-                </div>
-              </form>
-              <div className="todo-items-control">
-                <span className="edit-btn" onClick={(e) => handleEdit(e)}>edit</span>
-                <span className="complete-btn" onClick={() => handleComplete(id)}>complete</span>
-                <span className="delete-btn" onClick={() => handleDelete(id)}>delete</span>
-              </div>
-            </li>
+            todoActive = <TodoItems key={id} id={id} handleFormUpdate={handleFormUpdate} textareaUpdate={textareaUpdate} item={item} complete={complete} handleEdit={handleEdit} handleComplete={handleComplete} handleDelete={handleDelete} />
           }
-          return todoActive
+          return todoActive;
         })}
       </ul>
     </div>
