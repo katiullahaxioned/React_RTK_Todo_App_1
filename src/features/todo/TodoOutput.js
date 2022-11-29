@@ -1,254 +1,71 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { editTodo } from './todoSlice';
+import { updateTodo, deleteTodo, completeTodo } from './todoSlice';
 
 
 const TodoOutput = () => {
-  const todoItems = useSelector((state) => state.todos.todo);
-  // const [isEdit, setIsEdit] = useState(false);
   const dispatch = useDispatch();
-
-  // useEffect(()=>{
-
-  // })
-
   const todoContainer = useRef(null);
-  // const textarea = useRef(null);
-  // const li = useRef(null);
+  const todoItems = useSelector((state) => state.todos);
 
-  const handleEdit = (index) => {
-    const itemLi = todoContainer.current.children;
-    for(let item of itemLi) {
+  const removeActive = () => {
+    for (let item of todoContainer?.current?.children)
       item.classList.remove("active");
-    }
-    itemLi[index].classList.add("active");
+  };
+
+  const handleEdit = (e) => {
+    removeActive();
+    e.target.parentElement.parentElement.classList.add("active");
   }
 
-    const textareaUpdate = (e, i) => {
-        if(e.key === "Enter") {
-          const updatedText = {
-            index: i,
-            message: e.target.value.trim(),
-          }
-          dispatch(editTodo(updatedText))
-          const itemLi = todoContainer.current.children;
-          for(let item of itemLi) {
-            item.classList.remove("active");
-          }
-        }
+  const handleDelete = (id) => {
+    dispatch(deleteTodo(id));
+    removeActive();
+  }
+
+  const textareaUpdate = (e, id) => {
+    if (e.key === "Enter") {
+      dispatch(updateTodo({ id, item: e.target.value.trim() }));
+      removeActive();
     }
+  };
+
+  const handleComplete = (id) => {
+    dispatch(completeTodo(id));
+    removeActive();
+  }
 
   const handleFormUpdate = (e) => e.preventDefault();
 
-
   return (
-    <>
+    <div className='todo'>
       <div className="toggle-task">
-        <span className="toggle-btn active">active</span>
-        <span className="toggle-btn completed">completed</span>
-        <span className="toggle-btn all">all</span>
+        <span className="toggle-btn active-btn">active</span>
+        <span className="toggle-btn completed-btn">completed</span>
+        <span className="toggle-btn all-btn">all</span>
       </div>
       <ul className="todo-items-all" ref={todoContainer}>
-        {todoItems.map((item, i) => {
+        {todoItems && todoItems.map((todo) => {
+          const {id, item} = todo;
           return (
-            <li key={i} className='todo-item'>
+            <li key={id} className='todo-item'>
               <form className='form-todo-update' onSubmit={handleFormUpdate}>
                 <p className='textarea-para'>{item}</p>
                 <div className="input-textarea">
-                  <textarea className="textarea" onKeyUp={(e) => textareaUpdate(e, i)} defaultValue={item}></textarea>
+                  <textarea className="textarea" onKeyUp={(e) => textareaUpdate(e, id)} defaultValue={item} />
                 </div>
               </form>
               <div className="todo-items-control">
-                <span className="toggle-btn edit" onClick={() => handleEdit(i)}>edit</span>
-                <span className="toggle-btn complete">complete</span>
-                <span className="toggle-btn delete">delete</span>
+                <span className="toggle-btn edit-btn" onClick={(e) => handleEdit(e)}>edit</span>
+                <span className="toggle-btn complete-btn" onClick={() => handleComplete(id)}>complete</span>
+                <span className="toggle-btn delete-btn" onClick={() => handleDelete(id)}>delete</span>
               </div>
             </li>
           );
         })}
       </ul>
-    </>
+    </div>
   );
 }
 
 export default TodoOutput
-
-
-
-
-
-
-
-
-
-
-//   return (
-//     <>
-//       <div className="toggle-task">
-//         <span className="toggle-btn active">active</span>
-//         <span className="toggle-btn completed">completed</span>
-//         <span className="toggle-btn all">all</span>
-//       </div>
-//       <ul className="todo-items-all" ref={todoContainer}>
-//         {todoItems.map((item, i) => {
-//           return (
-//             <li key={i} className='todo-item'>
-//               <p className='textarea-para' style={{display: `${isEdit ? 'none' : 'block'}`}}>{item}</p>
-//               <div className="input-textarea">
-//                 <textarea className="textarea" ref={textarea} data-index={i} defaultValue={item} style={{display: `${isEdit ? 'block' : 'none'}`}}></textarea>
-//               </div>
-//               <div className="todo-items-control">
-//                 <span className="toggle-btn edit" onClick={() => handleEdit(i)}>edit</span>
-//                 <span className="toggle-btn complete">complete</span>
-//                 <span className="toggle-btn delete">delete</span>
-//               </div>
-//             </li>
-//           );
-//         })}
-//       </ul>
-//     </>
-//   );
-// }
-
-// export default TodoOutput
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useEffect, useRef, useState } from 'react'
-// import { useSelector, useDispatch } from 'react-redux'
-// import { editTodo } from './todoSlice';
-
-
-// const TodoOutput = () => {
-//   const todoItems = useSelector((state) => state.todos.todo);
-//   // const [isEdit, setIsEdit] = useState(false);
-//   const dispatch = useDispatch();
-
-//   const todoContainer = useRef(null);
-//   const textarea = useRef(null);
-
-//   // useEffect(()=>{
-//   //   // const textareaUpdate = (e) => {
-//   //   //   // if(e.target.key === 'Enter') {
-//   //   //     console.log(e.target);
-//   //   //     // dispatch(editTodo({message: e.target.value.trim(), index: e.target.dataset.index}))
-//   //   //   // }
-//   //   // }
-//   //   textarea?.current?.addEventListener('keydown', (e) => {
-//   //     // if(e.key === 'Enter') {
-//   //       console.log(e.target.value);
-//   //       // dispatch(editTodo({message: e.target.value.trim(), index: e.target.dataset.index}))
-//   //     // }
-//   //   } )
-//   //   // return () => {
-//   //   //   textarea?.current?.removeEventListener('keypress', textareaUpdate)
-//   //   // }
-//   // }, [])
-
-//   const handleEdit = (index) => {
-//     const itemLi = todoContainer.current.children;
-//     for(let item of itemLi) {
-//       item.classList.remove("active");
-//     }
-//     itemLi[index].classList.add("active");
-//   }
-
-//   const handleFormUpdate = (e) => {
-//     // e.preventDefault();
-//     // console.log(textarea.current.value);
-//   }
-
-
-//   return (
-//     <>
-//       <div className="toggle-task">
-//         <span className="toggle-btn active">active</span>
-//         <span className="toggle-btn completed">completed</span>
-//         <span className="toggle-btn all">all</span>
-//       </div>
-//       <ul className="todo-items-all" ref={todoContainer}>
-//         {todoItems.map((item, i) => {
-//           return (
-//             <li key={i} className='todo-item'>
-//               <form className='form-todo-update' onSubmit={handleFormUpdate}>
-//                 <p className='textarea-para'>{item}</p>
-//                 <div className="input-textarea">
-//                   <textarea className="textarea" ref={textarea} data-index={i} defaultValue={item}></textarea>
-//                 </div>
-//               </form>
-//               <div className="todo-items-control">
-//                 <span className="toggle-btn edit" onClick={() => handleEdit(i)}>edit</span>
-//                 <span className="toggle-btn complete">complete</span>
-//                 <span className="toggle-btn delete">delete</span>
-//               </div>
-//             </li>
-//           );
-//         })}
-//       </ul>
-//     </>
-//   );
-// }
-
-// export default TodoOutput
-
-
-
-
-
-
-
-
-
-
-// //   return (
-// //     <>
-// //       <div className="toggle-task">
-// //         <span className="toggle-btn active">active</span>
-// //         <span className="toggle-btn completed">completed</span>
-// //         <span className="toggle-btn all">all</span>
-// //       </div>
-// //       <ul className="todo-items-all" ref={todoContainer}>
-// //         {todoItems.map((item, i) => {
-// //           return (
-// //             <li key={i} className='todo-item'>
-// //               <p className='textarea-para' style={{display: `${isEdit ? 'none' : 'block'}`}}>{item}</p>
-// //               <div className="input-textarea">
-// //                 <textarea className="textarea" ref={textarea} data-index={i} defaultValue={item} style={{display: `${isEdit ? 'block' : 'none'}`}}></textarea>
-// //               </div>
-// //               <div className="todo-items-control">
-// //                 <span className="toggle-btn edit" onClick={() => handleEdit(i)}>edit</span>
-// //                 <span className="toggle-btn complete">complete</span>
-// //                 <span className="toggle-btn delete">delete</span>
-// //               </div>
-// //             </li>
-// //           );
-// //         })}
-// //       </ul>
-// //     </>
-// //   );
-// // }
-
-// // export default TodoOutput

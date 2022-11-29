@@ -7,14 +7,17 @@ const TodoForm = () => {
   const dispatch = useDispatch();
   const inputTodo = useRef(null);
 
-  const handleFormAction = (e) => {
-    e.preventDefault();
-  }
+  const handleFormAction = (e) => e.preventDefault();
 
   const handleAddTodo = () => {
-    const value = inputTodo.current.value.trim();
-    if(value) {
-      dispatch(addTodo(value));
+    const uid = (Math.random()).toString()
+    const todoValue = {
+      id: uid.slice(2,uid.length),
+      item: inputTodo.current.value.trim(),
+      complete: false,
+    }
+    if(todoValue) {
+      dispatch(addTodo(todoValue));
       inputTodo.current.value = '';
     }
   }
