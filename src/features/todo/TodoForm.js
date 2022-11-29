@@ -12,7 +12,7 @@ const TodoForm = () => {
   const handleAddTodo = () => {
     const uid = (Math.random()).toString()
     const todoValue = {
-      id: uid.slice(2,uid.length),
+      id: uid.slice(2,),
       item: inputTodo.current.value.trim(),
       complete: false,
     }

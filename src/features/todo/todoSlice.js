@@ -20,9 +20,9 @@ const todoSlice = createSlice({
     completeTodo: (state, action) => {
       for(let todo of state) if(todo.id === action.payload) todo.complete = true;
       return state;
-    }
+    },
   }
 })
 
 export default todoSlice.reducer;
-export const {addTodo, updateTodo, deleteTodo, completeTodo} = todoSlice.actions;
+export const {addTodo, updateTodo, deleteTodo, completeTodo } = todoSlice.actions;
